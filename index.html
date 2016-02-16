@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>yangzj1992's Netease mp3 player</title>
+	<link rel="stylesheet" type="text/css" href="css/style.min.css">
+	<meta name="viewport" id="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="UTF-8">
+	<style>
+		
+	</style>
+</head>
+<script src="https://cdn.jsdelivr.net/vue/latest/vue.js"></script>
+<body>
+	<div class="ym-panel" id="ym-player">
+		<div class="ym-box">
+			<div class="ym-player">
+				<div class="ym-album" id="ym-album"></div>
+				<div class="ym-songinfo">
+					<p class="ym-song-title" id="ym-song-title">{{ song_name }}</p>
+					<p class="ym-album-name" id="ym-album-name">{{ album_name }}</p>
+					<p class="ym-artist-name" id="ym-artist-name">{{ artist_name }}</p>
+				</div>
+				<div class="ym-controlmusic">
+					<ul>
+						<li @click="backmusic()"><i class="demo-icon icon-back">&#xe81c;</i></li>
+						<li @click="changeplay()">
+							<i class="demo-icon icon-pause" v-show="playStatus">&#xe81a;</i>
+							<i class="demo-icon icon-play" v-else>&#xe818;</i>
+						</li>
+						<li @click="nextmusic()"><i class="demo-icon icon-next">&#xe81b;</i></li>
+						<li><a class="demo-icon icon-eject" href="http://music.163.com/#/playlist?id=11081010">&#xe81d;</a></li>
+					</ul>
+				</div>
+				<div class="ym-progress">
+					<div class="progress-buffer"></div>
+					<div class="progress-played"></div>
+				</div>
+				<div class="ym-playinfo">
+					<ul>
+						<li @click="changevoice()">
+							<i class="demo-icon icon-volumn" v-show="havevoice">&#xe81e;</i>
+							<i class="demo-icon icon-volumn-off" v-else>&#xe81f;</i>
+        	    <input id="range" type="range" min="0" max="10" value="5" @change="volume($this.value)">
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="ym-lyric">
+				<div class="ym-lyric-bg"></div>
+				<ul class="ym-lyric-main" id="ym-lyric">
+					<li class="lyric-line"v-for="item in showlrc">
+						 {{ item.lyric }}
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<audio id="player">
+	</audio>
+</body>
+<script src="js/player.js"></script>
+</html>
