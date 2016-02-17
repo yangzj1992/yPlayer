@@ -17,12 +17,6 @@ function curl_get($url)
     return $output;
 }
 
-function get_playlist_info($playlist_id)
-{
-    $url = "http://music.163.com/api/playlist/detail?id=" . $playlist_id;
-    return curl_get($url);
-}
-
 function get_music_info($music_id)
 {
     $url = "http://music.163.com/api/song/detail/?id=" . $music_id . "&ids=%5B" . $music_id . "%5D";
@@ -35,7 +29,7 @@ function get_music_lyric($music_id)
     return curl_get($url);
 }
 
-function rand_music()
+function rand_music_id()
 {
     global $play_list;
     $sum = count($play_list);
@@ -45,16 +39,27 @@ function rand_music()
 
 function get_music_id()
 {
-    $id = rand_music();
+    $id = rand_music_id();
     return $id;
+}
+
+function get_playlist_info($playlist_id)
+{
+    $url = "http://music.163.com/api/playlist/detail?id=" . $playlist_id;
+    return curl_get($url);
 }
 
 $json = get_playlist_info($playlist);
 $arr = json_decode($json, true);
 $play_list = $arr["result"]["tracks"];
-
 //获取数据
-$id = get_music_id();
+
+if($_REQUEST['id']){
+    $id = $_REQUEST['id'];
+}else{
+    $id = get_music_id();
+}
+
 $music_info = json_decode(get_music_info($id), true);
 $lrc_info = json_decode(get_music_lyric($id), true);
 //处理音乐信息
@@ -63,8 +68,8 @@ $play_info["mp3"] = $music_info["songs"][0]["mp3Url"];
 $play_info["mp3"] = str_replace("http://m", "http://p", $play_info["mp3"]);
 $play_info["music_name"] = $music_info["songs"][0]["name"];
 $play_info["album_name"] = $music_info["songs"][0]["album"]["name"];
-$play_info["tracks"] = $play_list;
 $play_info["id"] = $id;
+$play_info["tracks"] = $play_list;
 foreach ($music_info["songs"][0]["artists"] as $key) {
     if (!isset($play_info["artists"])) {
         $play_info["artists"] = $key["name"];
@@ -73,7 +78,7 @@ foreach ($music_info["songs"][0]["artists"] as $key) {
     }
 }
 
-//处理歌词
+//歌词开始秒数处理
 if (isset($lrc_info["lrc"]["lyric"])) {
     $lrc = explode("\n", $lrc_info["lrc"]["lyric"]);
     array_pop($lrc);
@@ -86,13 +91,11 @@ if (isset($lrc_info["lrc"]["lyric"])) {
             $lyric = array();
             if(count($row) >2){
                 $col_text = $row[1] . ']';
-                array_pop($row);
-                array_pop($row);
+                $row = array_slice($row,0,1);
             }else{
                 $col_text = end($row);
                 array_pop($row);
             }
-
             foreach ($row as $key) {
                 $time = explode(":", substr($key, 1));
                 $time = $time[0] * 60 + $time[1];

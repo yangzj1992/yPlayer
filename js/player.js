@@ -41,14 +41,13 @@ var vm = new Vue({
       }
     },
     loadMusic:function(id){
-      this.getJSON('getNeteasePlayer.php?_='+ (new Date()).getTime()).then(function(data) {
-        let musicArray = data.tracks;
-        let musicLength = musicArray.length;
+      let url = id? 'getSong.php?id='+id: 'getSong.php?id=0'
+      this.getJSON(url).then(function(data) {
         let yAudio = document.getElementById('player');
+        vm.musicArray = data.tracks;
+        vm.musicLength = vm.musicArray.length;
         let album_pic = document.getElementsByClassName('ym-album')[0]
-        // let randomMusic = Math.ceil(Math.random()*musicLength)
         album_pic.style.backgroundImage = 'url('+data.cover+')';
-        let lyrics;
         if (data.lrc != "no") {
             for(let i in data.lrc){
               vm.showlrc.push({lyric:data.lrc[i]})
@@ -69,6 +68,36 @@ var vm = new Vue({
     changevoice:function(event){
       let yAudio = document.getElementById('player');
       yAudio.volume = vol / 10;
+    },
+    nextmusic:function(){
+      let yAudio = document.getElementById('player');
+      let album_pic = document.getElementsByClassName('ym-album')[0]
+      let random_index = Math.ceil(Math.random()*this.musicLength);
+      let random_id = this.musicArray[random_index].id;
+      this.showlrc = [];
+      this.getJSON('getLyrics.php?id='+random_id).then(function(data) {
+        if (data.lrc != "no") {
+            for(let i in data.lrc){
+              vm.showlrc.push({lyric:data.lrc[i]})
+            }
+        } else {
+            vm.showlrc.push({lyric:'暂无歌词'})
+        }
+      }, function(error) {
+        alert('服务器通信异常');
+      });
+      let artists_name;
+      for(let i in this.musicArray[random_index].artists){
+        artists_name += this.musicArray[random_index].artists[i].name 
+      }
+      album_pic.style.backgroundImage = 'url('+this.musicArray[random_index].album.picUrl+')';
+      vm.song_name = this.musicArray[random_index].name;
+      vm.album_name = this.musicArray[random_index].album.name;
+      vm.artist_name = artists_name;
+      let mp3_address = this.musicArray[random_index].mp3Url;
+      yAudio.setAttribute("src", mp3_address);
+      yAudio.volumn = 0.5;
+      yAudio.play();
     }
   }
 })
