@@ -29,18 +29,13 @@ function get_music_lyric($music_id)
     return curl_get($url);
 }
 
-function rand_music_id()
+function get_music_id()
 {
     global $play_list;
     $sum = count($play_list);
-    $id = $play_list[rand(0, $sum - 1)]["id"];
-    return $id;
-}
-
-function get_music_id()
-{
-    $id = rand_music_id();
-    return $id;
+    $music['index'] = rand(0,$sum-1);
+    $music['id'] = $play_list[$music["index"]]["id"];
+    return $music;
 }
 
 function get_playlist_info($playlist_id)
@@ -54,10 +49,11 @@ $arr = json_decode($json, true);
 $play_list = $arr["result"]["tracks"];
 //获取数据
 
-if($_REQUEST['id']){
+if($_REQUEST['id'] != '0'){
     $id = $_REQUEST['id'];
 }else{
-    $id = get_music_id();
+    $music = get_music_id();
+    $id = $music['id'];
 }
 
 $music_info = json_decode(get_music_info($id), true);
@@ -69,6 +65,7 @@ $play_info["mp3"] = str_replace("http://m", "http://p", $play_info["mp3"]);
 $play_info["music_name"] = $music_info["songs"][0]["name"];
 $play_info["album_name"] = $music_info["songs"][0]["album"]["name"];
 $play_info["id"] = $id;
+$play_info["index"] = $music['index'];
 $play_info["tracks"] = $play_list;
 foreach ($music_info["songs"][0]["artists"] as $key) {
     if (!isset($play_info["artists"])) {
@@ -90,8 +87,13 @@ if (isset($lrc_info["lrc"]["lyric"])) {
         } else {
             $lyric = array();
             if(count($row) >2){
-                $col_text = $row[1] . ']';
-                $row = array_slice($row,0,1);
+                if(end($row) != ']'){
+                    $col_text = end($row);
+                    $row = array_slice($row,0,1);
+                }else{
+                    $col_text = $row[1] . ']';
+                    $row = array_slice($row,0,1);
+                }
             }else{
                 $col_text = end($row);
                 array_pop($row);

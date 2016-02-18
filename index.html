@@ -23,11 +23,11 @@
 				<div class="ym-controlmusic">
 					<ul>
 						<li @click="backmusic()"><i class="demo-icon icon-back">&#xe81c;</i></li>
-						<li @click="changeplay()">
+						<li @click="changePlay()">
 							<i class="demo-icon icon-pause" v-show="playStatus">&#xe81a;</i>
 							<i class="demo-icon icon-play" v-else>&#xe818;</i>
 						</li>
-						<li @click="nextmusic()"><i class="demo-icon icon-next">&#xe81b;</i></li>
+						<li @click="nextMusic()"><i class="demo-icon icon-next">&#xe81b;</i></li>
 						<li><a class="demo-icon icon-eject" href="http://music.163.com/#/playlist?id=11081010">&#xe81d;</a></li>
 					</ul>
 				</div>
@@ -37,10 +37,10 @@
 				</div>
 				<div class="ym-playinfo">
 					<ul>
-						<li @click="changevoice()">
+						<li>
 							<i class="demo-icon icon-volumn" v-show="havevoice">&#xe81e;</i>
 							<i class="demo-icon icon-volumn-off" v-else>&#xe81f;</i>
-        	    <input id="range" type="range" min="0" max="10" value="5" @change="volume($this.value)">
+        	    <input id="range" type="range" min="0" max="10" value="5" @change="changeVoice">
 						</li>
 					</ul>
 				</div>
@@ -48,8 +48,8 @@
 			<div class="ym-lyric">
 				<div class="ym-lyric-bg"></div>
 				<ul class="ym-lyric-main" id="ym-lyric">
-					<li class="lyric-line"v-for="item in showlrc">
-						 {{ item.lyric }}
+					<li class="lyric-line" v-for="(key,val) in showlrc">
+						 <p dtime="{{key}}" :class="{'yellow':ontime}">{{ val }}</p>
 					</li>
 				</ul>
 			</div>

@@ -37,8 +37,13 @@ if (isset($lrc_info["lrc"]["lyric"])) {
         } else {
             $lyric = array();
             if(count($row) >2){
-                $col_text = $row[1] . ']';
-                $row = array_slice($row,0,1);
+                if(end($row) != ']'){
+                    $col_text = end($row);
+                    $row = array_slice($row,0,1);
+                }else{
+                    $col_text = $row[1] . ']';
+                    $row = array_slice($row,0,1);
+                }
             }else{
                 $col_text = end($row);
                 array_pop($row);
