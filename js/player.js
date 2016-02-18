@@ -15,8 +15,10 @@ var vm = new Vue({
     playingIndex:'',
     havevoice:true,
     playStatus:true,
-    backIndex:'',
-    backMusic:'',
+    prevIndex:'',
+    prevMusic:'',
+    followIndex:'',
+    followMusic:'',
     ontime:false
   },
   created: function () {
@@ -55,7 +57,7 @@ var vm = new Vue({
         if (data.lrc != "no") {
           vm.showlrc = data.lrc;
         } else {
-          vm.showlrc = [{lyric:'暂无歌词'}];
+          vm.showlrc = {"0":"暂无歌词"}
         }
         vm.song_name = data.music_name;
         vm.album_name = data.album_name;
@@ -72,49 +74,34 @@ var vm = new Vue({
     changeVoice:function(event){
       let yAudio = document.getElementById('player');
       yAudio.volume = event.target.value / 10;
-    },
-    backMusic:function(){
-      let yAudio = document.getElementById('player');
-      let album_pic = document.getElementsByClassName('ym-album')[0]
-      let random_index = Math.ceil(Math.random()*this.musicLength);
-      let random_id = this.musicArray[random_index].id;
-      this.showlrc = [];
-      this.getJSON('getLyrics.php?id='+random_id).then(function(data) {
-        if (data.lrc != "no") {
-          vm.showlrc= data.lrc;
-        } else {
-          vm.showlrc= [{lyric:'暂无歌词'}];
-        }
-      }, function(error) {
-        alert('服务器通信异常');
-      });
-      let artists_name = '';
-      for(let i in this.musicArray[random_index].artists){
-        artists_name += this.musicArray[random_index].artists[i].name 
+      if(event.target.value == 0){
+        this.havevoice = false;
+      }else{
+        this.havevoice = true;
       }
-      album_pic.style.backgroundImage = 'url('+this.musicArray[random_index].album.picUrl+')';
-      this.playingMusic = this.musicArray[random_index].id;
-      this.song_name = this.musicArray[random_index].name;
-      this.album_name = this.musicArray[random_index].album.name;
-      this.artist_name = artists_name;
-      let mp3_address = this.musicArray[random_index].mp3Url;
-      yAudio.setAttribute("src", mp3_address);
-      yAudio.volumn = 0.5;
-      yAudio.play();
     },
     nextMusic:function(){
       let yAudio = document.getElementById('player');
-      this.backMusic = this.playingMusic;
-      this.backMusic = this.playingMusic;
-      let album_pic = document.getElementsByClassName('ym-album')[0]
-      let random_index = Math.ceil(Math.random()*this.musicLength);
-      let random_id = this.musicArray[random_index].id;
+      let album_pic = document.getElementsByClassName('ym-album')[0];
+      var random_index;
+      var random_id;
+      if(!this.followMusic || !this.followIndex){
+        random_index = Math.ceil(Math.random()*this.musicLength);
+        random_id = this.musicArray[random_index].id;
+      }else{
+        random_index = this.followIndex;
+        random_id = this.followMusic;
+      }
+      this.followIndex = '';
+      this.followMusic = '';
+      this.prevMusic = this.playingMusic;
+      this.prevIndex = this.playingIndex;
       this.showlrc = [];
       this.getJSON('getLyrics.php?id='+random_id).then(function(data) {
         if (data.lrc != "no") {
           vm.showlrc= data.lrc;
         } else {
-          vm.showlrc= [{lyric:'暂无歌词'}] ;
+          vm.showlrc= {"0":"暂无歌词"} ;
         }
       }, function(error) {
         alert('服务器通信异常');
@@ -125,6 +112,7 @@ var vm = new Vue({
       }
       album_pic.style.backgroundImage = 'url('+this.musicArray[random_index].album.picUrl+')';
       this.playingMusic = this.musicArray[random_index].id;
+      this.playingIndex = random_index;
       this.song_name = this.musicArray[random_index].name;
       this.album_name = this.musicArray[random_index].album.name;
       this.artist_name = artists_name;
@@ -132,6 +120,43 @@ var vm = new Vue({
       yAudio.setAttribute("src", mp3_address);
       yAudio.volumn = 0.5;
       yAudio.play();
+      this.playStatus = true;
+    },
+    backMusic:function(){
+      let yAudio = document.getElementById('player');
+      let album_pic = document.getElementsByClassName('ym-album')[0];
+      if(!this.prevMusic || !this.prevIndex){
+        return false;
+      }
+      this.followIndex = this.playingIndex;
+      this.followMusic = this.playingMusic;
+      this.showlrc = [];
+      this.getJSON('getLyrics.php?id='+this.prevMusic).then(function(data) {
+        if (data.lrc != "no") {
+          vm.showlrc= data.lrc;
+        } else {
+          vm.showlrc= {"0":"暂无歌词"};
+        }
+      }, function(error) {
+        alert('服务器通信异常');
+      });
+      let artists_name = '';
+      for(let i in this.musicArray[this.prevIndex].artists){
+        artists_name += this.musicArray[this.prevIndex].artists[i].name 
+      }
+      album_pic.style.backgroundImage = 'url('+this.musicArray[this.prevIndex].album.picUrl+')';
+      this.playingMusic = this.musicArray[this.prevIndex].id;
+      this.playingIndex = this.prevIndex;
+      this.song_name = this.musicArray[this.prevIndex].name;
+      this.album_name = this.musicArray[this.prevIndex].album.name;
+      this.artist_name = artists_name;
+      let mp3_address = this.musicArray[this.prevIndex].mp3Url;
+      this.prevMusic = '';
+      this.prevIndex = '';
+      yAudio.setAttribute("src", mp3_address);
+      yAudio.volumn = 0.5;
+      yAudio.play();
+      this.playStatus = true;
     },
     display_lrc:function() {
       let yAudio = document.getElementById('player');
