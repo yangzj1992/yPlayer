@@ -37,23 +37,20 @@ var vm = new Vue({
       return promise;
     },
     changePlay:function(){
-      let yAudio = document.getElementById('player');
       if(this.playStatus == false){
         this.playStatus = true;
-        yAudio.play();
+        this.$els.mplayer.play();
       }else{
         this.playStatus = false;
-        yAudio.pause();
+        this.$els.mplayer.pause();
       }
     },
     loadMusic:function(id){
       let url = id? 'getSong.php?id='+id: 'getSong.php?id=0'
       this.getJSON(url).then(function(data) {
-        let yAudio = document.getElementById('player');
         vm.musicArray = data.tracks;
         vm.musicLength = vm.musicArray.length;
-        let album_pic = document.getElementsByClassName('ym-album')[0]
-        album_pic.style.backgroundImage = 'url('+data.cover+')';
+        vm.$els.album.style.backgroundImage = 'url('+data.cover+')';
         if (data.lrc != "no") {
           vm.showlrc = data.lrc;
         } else {
@@ -64,16 +61,15 @@ var vm = new Vue({
         vm.artist_name = data.artists;
         vm.playingMusic = data.id;
         vm.playingIndex = data.index;
-        yAudio.setAttribute("src", data.mp3);
-        yAudio.volumn = 0.5;
-        yAudio.play();
+        vm.$els.mplayer.setAttribute("src", data.mp3);
+        vm.$els.mplayer.volumn = 0.5;
+        vm.$els.mplayer.play();
       }, function(error) {
         alert('服务器通信异常');
       });
     },
     changeVoice:function(event){
-      let yAudio = document.getElementById('player');
-      yAudio.volume = event.target.value / 10;
+      this.$els.mplayer.volume = event.target.value / 10;
       if(event.target.value == 0){
         this.havevoice = false;
       }else{
@@ -81,8 +77,6 @@ var vm = new Vue({
       }
     },
     nextMusic:function(){
-      let yAudio = document.getElementById('player');
-      let album_pic = document.getElementsByClassName('ym-album')[0];
       var random_index;
       var random_id;
       if(!this.followMusic || !this.followIndex){
@@ -110,21 +104,19 @@ var vm = new Vue({
       for(let i in this.musicArray[random_index].artists){
         artists_name += this.musicArray[random_index].artists[i].name 
       }
-      album_pic.style.backgroundImage = 'url('+this.musicArray[random_index].album.picUrl+')';
+      this.$els.album.style.backgroundImage = 'url('+this.musicArray[random_index].album.picUrl+')';
       this.playingMusic = this.musicArray[random_index].id;
       this.playingIndex = random_index;
       this.song_name = this.musicArray[random_index].name;
       this.album_name = this.musicArray[random_index].album.name;
       this.artist_name = artists_name;
       let mp3_address = this.musicArray[random_index].mp3Url;
-      yAudio.setAttribute("src", mp3_address);
-      yAudio.volumn = 0.5;
-      yAudio.play();
+      this.$els.mplayer.setAttribute("src", mp3_address);
+      this.$els.mplayer.volumn = 0.5;
+      this.$els.mplayer.play();
       this.playStatus = true;
     },
     backMusic:function(){
-      let yAudio = document.getElementById('player');
-      let album_pic = document.getElementsByClassName('ym-album')[0];
       if(!this.prevMusic || !this.prevIndex){
         return false;
       }
@@ -144,7 +136,7 @@ var vm = new Vue({
       for(let i in this.musicArray[this.prevIndex].artists){
         artists_name += this.musicArray[this.prevIndex].artists[i].name 
       }
-      album_pic.style.backgroundImage = 'url('+this.musicArray[this.prevIndex].album.picUrl+')';
+      this.$els.album.style.backgroundImage = 'url('+this.musicArray[this.prevIndex].album.picUrl+')';
       this.playingMusic = this.musicArray[this.prevIndex].id;
       this.playingIndex = this.prevIndex;
       this.song_name = this.musicArray[this.prevIndex].name;
@@ -153,14 +145,13 @@ var vm = new Vue({
       let mp3_address = this.musicArray[this.prevIndex].mp3Url;
       this.prevMusic = '';
       this.prevIndex = '';
-      yAudio.setAttribute("src", mp3_address);
-      yAudio.volumn = 0.5;
-      yAudio.play();
+      this.$els.mplayer.setAttribute("src", mp3_address);
+      this.$els.mplayer.volumn = 0.5;
+      this.$els.mplayer.play();
       this.playStatus = true;
     },
     display_lrc:function() {
-      let yAudio = document.getElementById('player');
-      play_time = Math.floor(yAudio.currentTime).toString();
+      play_time = Math.floor(this.$els.mplayer.currentTime).toString();
       this.ontime =true;
     }
   }
