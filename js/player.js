@@ -188,11 +188,10 @@ var vm = new Vue({
       this.display_lrc(play_time);
     },
     display_lrc:function(play_time) {
-      // let keys = Object.keys(this.showlrc);
-      // for(let i = 0;i<keys.length;i++){
-      //   if(play_time < keys[i])
-      // }
-      this.playingtime = play_time;
+      let lrcs = document.getElementsByClassName('lrc');
+      for(let i = 0;i<lrcs.length;i++){
+        
+      }
     }
   }
 })

@@ -58,4 +58,38 @@ if (isset($lrc_info["lrc"]["lyric"])) {
 } else {
     $play_info["lrc"] = "no";
 }
+
+if(isset($lrc_info["tlyric"]["lyric"])){
+    $lrc = explode("\n", $lrc_info["tlyric"]["lyric"]);
+    if($lrc[count($lrc)-1] == ''){
+        array_pop($lrc);
+    }
+    foreach ($lrc as $rows) {
+        $row = explode("]", $rows);
+        if (count($row) == 1) {
+            break;
+        } else {
+            $lyric = array();
+            if(count($row) >2){
+                if(end($row) != ']'){
+                    $col_text = end($row);
+                    $row = array_slice($row,0,1);
+                }else{
+                    $col_text = $row[1] . ']';
+                    $row = array_slice($row,0,1);
+                }
+            }else{
+                $col_text = end($row);
+                array_pop($row);
+            }
+            foreach ($row as $key) {
+                if($col_text != ' ' && $col_text != '' ){
+                    $time = explode(":", substr($key, 1));
+                    $time = $time[0] * 60 + $time[1];
+                    $play_info["lrc"][$time] .= "(" . $col_text . ")";
+                }
+            }
+        }
+    }
+}
 echo json_encode($play_info);
