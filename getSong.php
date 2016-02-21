@@ -53,7 +53,7 @@ if($_REQUEST['id'] != '0'){
     $id = $_REQUEST['id'];
 }else{
     $music = get_music_id();
-    $id = $music['id'];
+    $id =  $music['id'];
 }
 
 $music_info = json_decode(get_music_info($id), true);

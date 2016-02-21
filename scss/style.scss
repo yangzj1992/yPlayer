@@ -73,7 +73,7 @@ table {
   }
 }
 */
-.yellow{
+.active{
   font-size: 24px;
   color:red;
 }
@@ -123,7 +123,7 @@ table {
     left:24%;
     width:600px;
     display: flex;
-    height: 450px;
+    height: 480px;
     .ym-player{
       width:240px;
       background-color: #fff;
@@ -175,6 +175,16 @@ table {
         }
         .progress-played{
           background-color: blue;
+        }
+      }
+      .ym-playinfo{
+        .time{
+          position: relative;
+          top: -2px;
+          display: inline-block;
+        }
+        #range{
+          width: 80px;
         }
       }
     }

@@ -38,6 +38,9 @@
 				<div class="ym-playinfo">
 					<ul>
 						<li>
+							<div class="time">
+								<span class="curtime">{{curtime}}</span>/<span class="musictime">{{musictime}}</span>
+							</div>
 							<i class="demo-icon icon-volumn" v-show="havevoice">&#xe81e;</i>
 							<i class="demo-icon icon-volumn-off" v-else>&#xe81f;</i>
         	    <input id="range" type="range" min="0" max="10" value="5" @change="changeVoice">
@@ -49,12 +52,12 @@
 				<div class="ym-lyric-bg"></div>
 				<ul class="ym-lyric-main" id="ym-lyric">
 					<li class="lyric-line" v-for="(key,val) in showlrc">
-						 <p dtime="{{key}}" :class="{'yellow':ontime}">{{ val }}</p>
+						 <p dtime="{{key}}" class="lrc" :class="{'active': (key == playingtime) }">{{ val }}</p>
 					</li>
 				</ul>
 			</div>
 		</div>
-		<audio id="player" v-el:mplayer>
+		<audio id="player" @durationchange="getMusic()" @timeupdate="playEvent()" v-el:mplayer>
 		</audio>
 	</div>
 </body>

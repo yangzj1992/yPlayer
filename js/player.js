@@ -3,6 +3,7 @@
 * Author yangzj1992
 */
 "use strict"
+Vue.config.debug = true;
 var vm = new Vue({
   el: '#ym-player',
   data:{
@@ -19,7 +20,9 @@ var vm = new Vue({
     prevMusic:'',
     followIndex:'',
     followMusic:'',
-    ontime:false
+    curtime:'00:00',
+    musictime:'00:00',
+    playingtime:0
   },
   created: function () {
     this.loadMusic();
@@ -150,9 +153,46 @@ var vm = new Vue({
       this.$els.mplayer.play();
       this.playStatus = true;
     },
-    display_lrc:function() {
-      play_time = Math.floor(this.$els.mplayer.currentTime).toString();
-      this.ontime =true;
+    getMusic:function(){
+      let m_second,m_minute;
+      let temp_minute = parseInt(this.$els.mplayer.duration / 60);
+      if(temp_minute.toString().length > 1){
+        m_minute = '' + temp_minute;
+      }else{
+        m_minute = '0' + temp_minute;
+      }
+      let temp_second = parseInt(this.$els.mplayer.duration % 60);
+      if(temp_second.toString().length > 1){
+        m_second = '' + temp_second;
+      }else{
+        m_second = '0' + temp_second;
+      }
+      this.musictime = m_minute + ':' + m_second;
+    },
+    playEvent:function(){
+      let c_second,c_minute;
+      let temp_minute = parseInt(this.$els.mplayer.currentTime / 60);
+      if(temp_minute.toString().length > 1){
+        c_minute = '' + temp_minute;
+      }else{
+        c_minute = '0' + temp_minute;
+      }
+      let temp_second = parseInt(this.$els.mplayer.currentTime % 60);
+      if(temp_second.toString().length > 1){
+        c_second = '' + temp_second;
+      }else{
+        c_second = '0' + temp_second;
+      }
+      this.curtime = c_minute + ':' + c_second;
+      let play_time = Math.floor(this.$els.mplayer.currentTime).toString();
+      this.display_lrc(play_time);
+    },
+    display_lrc:function(play_time) {
+      // let keys = Object.keys(this.showlrc);
+      // for(let i = 0;i<keys.length;i++){
+      //   if(play_time < keys[i])
+      // }
+      this.playingtime = play_time;
     }
   }
 })
