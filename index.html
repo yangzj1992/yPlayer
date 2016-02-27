@@ -12,7 +12,7 @@
 <script src="https://cdn.jsdelivr.net/vue/latest/vue.js"></script>
 <body>
 	<div class="ym-panel" id="ym-player">
-		<div class="ym-box">
+		<div class="ym-box" v-show="loaded" :class="{'loaded':loaded}">
 			<div class="ym-player">
 				<div class="ym-album" id="ym-album" v-el:album></div>
 				<div class="ym-songinfo">
@@ -56,6 +56,10 @@
 					</li>
 				</ul>
 			</div>
+		</div>
+		<div v-else class="loader-boxs">
+			<p class="milk">yPlayer</p>
+			<div class="loader"></div>
 		</div>
 		<audio id="player" @durationchange="getMusic()" @timeupdate="playEvent()" v-el:mplayer>
 		</audio>

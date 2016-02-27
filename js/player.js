@@ -22,7 +22,8 @@ var vm = new Vue({
     followMusic:'',
     curtime:'00:00',
     musictime:'00:00',
-    playingtime:0
+    playingtime:0,
+    loaded:false
   },
   created: function () {
     this.loadMusic();
@@ -49,7 +50,7 @@ var vm = new Vue({
       }
     },
     loadMusic:function(id){
-      let url = id? 'getSong.php?id='+id: 'getSong.php?id=0'
+      let url = id? 'getSong.php?id='+id : 'getSong.php?id=0';
       this.getJSON(url).then(function(data) {
         vm.musicArray = data.tracks;
         vm.musicLength = vm.musicArray.length;
@@ -64,6 +65,7 @@ var vm = new Vue({
         vm.artist_name = data.artists;
         vm.playingMusic = data.id;
         vm.playingIndex = data.index;
+        vm.loaded = true;
         vm.$els.mplayer.setAttribute("src", data.mp3);
         vm.$els.mplayer.volumn = 0.5;
         vm.$els.mplayer.play();
@@ -190,7 +192,7 @@ var vm = new Vue({
     display_lrc:function(play_time) {
       let lrcs = document.getElementsByClassName('lrc');
       for(let i = 0;i<lrcs.length;i++){
-        
+
       }
     }
   }

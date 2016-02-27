@@ -1,3 +1,15 @@
+$colors:
+  rgba(#e11462, 0.75)
+  rgba(#3db88f, 0.75)
+  rgba(#6fcadc, 0.75)
+  rgba(#e9ab25, 0.75);
+$size: 2.5em;
+$thickness: 0.5em;
+
+// Calculated variables.
+$lat: ($size - $thickness) / 2;
+$offset: $lat - $thickness;
+
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp,
 small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li,
@@ -116,14 +128,109 @@ table {
   width:100%;
   height: 100%;
   background-image: url('http://mu6.bdstatic.com/cms/mbox/fm/midnight.jpg');
-  font:14px/21px "microsoft yahei", Helvetica, Arial, "宋体", sans-serif;
+  font:14px/21px "microsoft yahei", "Helvetica", "Arial", "宋体", "sans-serif";
+  .milk{
+    font-family: "Arial Rounded MT Bold", "Helvetica Rounded", "Arial", "sans-serif";
+    font-size: 92px;
+    color:#f1ebe5;
+    font-weight: bold;
+    display: block;
+    position: absolute;
+    top: calc(49% - #{$size / 2});
+    left: calc(47% - #{$size / 2});
+    height: 50px;
+  }
+  .loader{
+    width: $size;
+    height: $size;
+    transform: rotate(165deg);
+    position: absolute;
+    top: calc(50% - #{$size / 2});
+    left: calc(50% - #{$size / 2});
+    
+    &:before,
+    &:after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      display: block;
+      width: $thickness;
+      height: $thickness;
+      border-radius: $thickness / 2;
+      transform: translate(-50%, -50%);
+    }
+    
+    &:before {
+      animation: before 2s infinite;
+    }
+    
+    &:after {
+      animation: after 2s infinite;
+    }
+  }
+  
+  @keyframes before {
+    0% {
+      width: $thickness;
+      box-shadow:
+        $lat (-$offset) nth($colors, 1),
+        (-$lat) $offset nth($colors, 3);
+    }
+    35% {
+      width: $size;
+      box-shadow:
+        0 (-$offset) nth($colors, 1),
+        0   $offset  nth($colors, 3);
+    }
+    70% {
+      width: $thickness;
+      box-shadow:
+        (-$lat) (-$offset) nth($colors, 1),
+        $lat $offset nth($colors, 3);
+    }
+    100% {
+      box-shadow:
+        $lat (-$offset) nth($colors, 1),
+        (-$lat) $offset nth($colors, 3);
+    }
+  }
+  
+  @keyframes after {
+    0% {
+      height: $thickness;
+      box-shadow:
+        $offset $lat nth($colors, 2),
+        (-$offset) (-$lat) nth($colors, 4);
+    }
+    35% {
+      height: $size;
+      box-shadow:
+          $offset  0 nth($colors, 2),
+        (-$offset) 0 nth($colors, 4);
+    }
+    70% {
+      height: $thickness;
+      box-shadow:
+        $offset (-$lat) nth($colors, 2),
+        (-$offset) $lat nth($colors, 4);
+    }
+    100% {
+      box-shadow:
+        $offset $lat nth($colors, 2),
+        (-$offset) (-$lat) nth($colors, 4);
+    }
+  }
+  .loaded{
+    display: flex!important;
+  }
   .ym-box{
     position: absolute;
     top:12%;
     left:24%;
     width:600px;
-    display: flex;
     height: 480px;
+    display: none;
     .ym-player{
       width:240px;
       background-color: #fff;
