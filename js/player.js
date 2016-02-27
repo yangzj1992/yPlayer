@@ -188,6 +188,10 @@ var vm = new Vue({
       this.curtime = c_minute + ':' + c_second;
       let play_time = Math.floor(this.$els.mplayer.currentTime).toString();
       this.display_lrc(play_time);
+      let buffer_percent = this.$els.mplayer.buffered.end(0) / this.$els.mplayer.duration;
+      let current_percent = this.$els.mplayer.currentTime / this.$els.mplayer.duration;
+      vm.$els.buffer.style.transform = "scaleX("+buffer_percent+")"
+      vm.$els.playtime.style.transform = "scaleX("+current_percent+")"
     },
     display_lrc:function(play_time) {
       let lrcs = document.getElementsByClassName('lrc');
