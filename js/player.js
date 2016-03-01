@@ -196,7 +196,19 @@ var vm = new Vue({
     display_lrc:function(play_time) {
       let lrcs = document.getElementsByClassName('lrc');
       for(let i = 0;i<lrcs.length;i++){
-
+        if(lrcs[i].getAttribute('dtime') <= this.$els.mplayer.currentTime && this.$els.mplayer.currentTime < lrcs[i+1].getAttribute('dtime')){
+          if(lrcs[i].classList){
+            lrcs[i].classList.add('lrc-current');
+          }else{
+            lrcs[i].className += ' ' + 'lrc-current';
+          }
+        }else{
+          if (lrcs[i].classList){
+            lrcs[i].classList.remove('lrc-current');
+          }else{
+            lrcs[i].className = lrcs[i].className.replace(new RegExp('(^|\\b)' + 'lrc-current'.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');//ie8
+          }
+        }
       }
     }
   }

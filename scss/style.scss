@@ -128,6 +128,7 @@ table {
   width:100%;
   height: 100%;
   background-image: url('http://mu6.bdstatic.com/cms/mbox/fm/midnight.jpg');
+  background-size: cover;
   font:14px/21px "microsoft yahei", "Helvetica", "Arial", "宋体", "sans-serif";
   .milk{
     font-family: "Arial Rounded MT Bold", "Helvetica Rounded", "Arial", "sans-serif";
@@ -271,6 +272,9 @@ table {
           }
         }
       }
+      .ym-controlmusic ul li{
+        margin:0 10px;
+      }
       .ym-progress{
         margin-top: 10px;
         height: 3px;
@@ -332,6 +336,11 @@ table {
         height: 400px;
         overflow-y: scroll;
         position:relative;
+        .lrc-current{
+          color: #f36868;
+          font-size: 22px;
+          line-height: 30px;
+        }
         .lyric-line{
           color:#fff;
           font-size: 14px;
@@ -340,6 +349,9 @@ table {
             margin-bottom: 8px;
           }
         }
+      }
+      .ym-lyric-main::-webkit-scrollbar{
+         background: transparent;
       }
     }
   }
