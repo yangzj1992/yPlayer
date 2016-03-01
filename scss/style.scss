@@ -235,7 +235,29 @@ table {
     .ym-player{
       width:240px;
       background-color: #fff;
+      position: relative;
       padding:10px;
+      .maskbox{
+        .mask{
+          position: absolute;
+          left: 10px;
+          top: 10px;
+          width: 240px;
+          height: 240px;
+          background-color: #000;
+          opacity: 0.6;
+        }
+        p{
+          position: absolute;
+          left: 10px;
+          width: 240px;
+          height: 240px;
+          top: 10px;
+          line-height: 240px;
+          text-align: center;
+          color: #fff;
+        }
+      }
       .ym-album{
         width: 240px;
         height: 240px;

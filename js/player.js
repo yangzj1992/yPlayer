@@ -190,23 +190,28 @@ var vm = new Vue({
       this.display_lrc(play_time);
       let buffer_percent = this.$els.mplayer.buffered.end(0) / this.$els.mplayer.duration;
       let current_percent = this.$els.mplayer.currentTime / this.$els.mplayer.duration;
-      vm.$els.buffer.style.transform = "scaleX("+buffer_percent+")"
-      vm.$els.playtime.style.transform = "scaleX("+current_percent+")"
+      this.$els.buffer.style.transform = "scaleX("+buffer_percent+")"
+      this.$els.playtime.style.transform = "scaleX("+current_percent+")"
     },
     display_lrc:function(play_time) {
       let lrcs = document.getElementsByClassName('lrc');
       for(let i = 0;i<lrcs.length;i++){
-        if(lrcs[i].getAttribute('dtime') <= this.$els.mplayer.currentTime && this.$els.mplayer.currentTime < lrcs[i+1].getAttribute('dtime')){
-          if(lrcs[i].classList){
-            lrcs[i].classList.add('lrc-current');
+        if(i+1 < lrcs.length){
+          if(lrcs[i].getAttribute('dtime') <= this.$els.mplayer.currentTime && this.$els.mplayer.currentTime < lrcs[i+1].getAttribute('dtime')){
+            if(lrcs[i].classList){
+              lrcs[i].classList.add('lrc-current');
+            }else{
+              lrcs[i].className += ' ' + 'lrc-current';
+            }
+            if(lrcs[i].offsetTop > 200){
+              this.$els.lyricbox.scrollTop = lrcs[i].offsetTop - 200;
+            }
           }else{
-            lrcs[i].className += ' ' + 'lrc-current';
-          }
-        }else{
-          if (lrcs[i].classList){
-            lrcs[i].classList.remove('lrc-current');
-          }else{
-            lrcs[i].className = lrcs[i].className.replace(new RegExp('(^|\\b)' + 'lrc-current'.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');//ie8
+            if (lrcs[i].classList){
+              lrcs[i].classList.remove('lrc-current');
+            }else{
+              lrcs[i].className = lrcs[i].className.replace(new RegExp('(^|\\b)' + 'lrc-current'.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');//ie8
+            }
           }
         }
       }

@@ -14,7 +14,12 @@
 	<div class="ym-panel" id="ym-player">
 		<div class="ym-box" v-show="loaded" :class="{'loaded':loaded}">
 			<div class="ym-player">
-				<div class="ym-album" id="ym-album" v-el:album></div>
+				<div class="ym-album" id="ym-album" v-el:album @click="changePlay()"></div>
+				<div v-show="playStatus"></div>
+				<div class="maskbox" v-else @click="changePlay()">
+					<div class="mask"></div>
+					<p>点击继续播放</p>
+				</div>
 				<div class="ym-songinfo">
 					<p class="ym-song-title" id="ym-song-title">{{ song_name }}</p>
 					<p class="ym-album-name" id="ym-album-name">{{ album_name }}</p>
@@ -50,7 +55,7 @@
 			</div>
 			<div class="ym-lyric">
 				<div class="ym-lyric-bg"></div>
-				<ul class="ym-lyric-main" id="ym-lyric">
+				<ul class="ym-lyric-main" v-el:lyricbox>
 					<li class="lyric-line" v-for="(key,val) in showlrc">
 						 <p dtime="{{key}}" class="lrc">{{ val }}</p>
 					</li>
