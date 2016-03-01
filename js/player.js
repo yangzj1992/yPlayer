@@ -215,6 +215,13 @@ var vm = new Vue({
           }
         }
       }
+      if(lrcs[lrcs.length-1].getAttribute('dtime') <= this.$els.mplayer.currentTime){
+        if(lrcs[lrcs.length-1].classList){
+          lrcs[lrcs.length-1].classList.add('lrc-current');
+        }else{
+          lrcs[lrcs.length-1].className += ' ' + 'lrc-current';
+        }
+      }
     }
   }
 })
