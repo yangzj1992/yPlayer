@@ -22,7 +22,6 @@ var vm = new Vue({
     followMusic:'',
     curtime:'00:00',
     musictime:'00:00',
-    playingtime:0,
     loaded:false
   },
   created: function () {
@@ -192,6 +191,10 @@ var vm = new Vue({
       let current_percent = this.$els.mplayer.currentTime / this.$els.mplayer.duration;
       this.$els.buffer.style.transform = "scaleX("+buffer_percent+")"
       this.$els.playtime.style.transform = "scaleX("+current_percent+")"
+    },
+    changeProgress:function(event){
+      let progressX = event.clientX - this.$els.progress.getBoundingClientRect().left;
+      this.$els.mplayer.currentTime = parseInt(progressX/240*this.$els.mplayer.duration)
     },
     display_lrc:function(play_time) {
       let lrcs = document.getElementsByClassName('lrc');

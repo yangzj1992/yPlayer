@@ -36,7 +36,7 @@
 						<li><a class="demo-icon icon-eject" href="http://music.163.com/#/playlist?id=11081010" target="_blank">&#xe81d;</a></li>
 					</ul>
 				</div>
-				<div class="ym-progress">
+				<div class="ym-progress" @click="changeProgress" v-el:progress>
 					<div class="progress-buffer" v-el:buffer></div>
 					<div class="progress-played" v-el:playtime></div>
 				</div>
@@ -66,7 +66,7 @@
 			<p class="milk">yPlayer</p>
 			<div class="loader"></div>
 		</div>
-		<audio id="player" @durationchange="getMusic()" @timeupdate="playEvent()" v-el:mplayer>
+		<audio id="player" @durationchange="getMusic()" @ended="nextMusic()" @timeupdate="playEvent()" v-el:mplayer>
 		</audio>
 	</div>
 </body>
