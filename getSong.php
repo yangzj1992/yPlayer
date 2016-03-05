@@ -89,6 +89,7 @@ if(!isset($music_info["songs"])){
 
 
 //歌词开始秒数处理
+
 if (isset($lrc_info["lrc"]["lyric"])) {
     $lrc = explode("\n", $lrc_info["lrc"]["lyric"]);
     array_pop($lrc);
@@ -150,7 +151,9 @@ if(isset($lrc_info["tlyric"]["lyric"])){
                 if($col_text != ' ' && $col_text != '' ){
                     $time = explode(":", substr($key, 1));
                     $time = $time[0] * 60 + $time[1];
-                    $play_info["lrc"][$time] .= "(" . $col_text . ")";
+                    if(isset($play_info["lrc"][$time])){
+                        $play_info["lrc"][$time] .= "(" . $col_text . ")";
+                    }
                 }
             }
         }

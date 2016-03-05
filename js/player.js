@@ -20,6 +20,7 @@ var vm = new Vue({
     prevMusic:'',
     followIndex:'',
     followMusic:'',
+    volume:0.5,
     curtime:'00:00',
     musictime:'00:00',
     loaded:false
@@ -66,7 +67,7 @@ var vm = new Vue({
         vm.playingIndex = data.index;
         vm.loaded = true;
         vm.$els.mplayer.setAttribute("src", data.mp3);
-        vm.$els.mplayer.volumn = 0.5;
+        vm.$els.mplayer.volume = 0.5;
         vm.$els.mplayer.play();
       }, function(error) {
         alert('服务器通信异常');
@@ -78,6 +79,18 @@ var vm = new Vue({
         this.havevoice = false;
       }else{
         this.havevoice = true;
+        this.volume = event.target.value;
+      }
+    },
+    changeSound:function(){
+      if(this.havevoice == true){
+        this.havevoice = false;
+        this.$els.mplayer.volume = 0;
+        this.$els.soundrange.value = 0;
+      }else{
+        this.havevoice = true;
+        this.$els.mplayer.volume = this.volume/10;
+        this.$els.soundrange.value = this.volume;
       }
     },
     nextMusic:function(){
@@ -116,7 +129,7 @@ var vm = new Vue({
       this.artist_name = artists_name;
       let mp3_address = this.musicArray[random_index].mp3Url;
       this.$els.mplayer.setAttribute("src", mp3_address);
-      this.$els.mplayer.volumn = 0.5;
+      this.$els.mplayer.volume = 0.5;
       this.$els.mplayer.play();
       this.playStatus = true;
     },
@@ -150,7 +163,7 @@ var vm = new Vue({
       this.prevMusic = '';
       this.prevIndex = '';
       this.$els.mplayer.setAttribute("src", mp3_address);
-      this.$els.mplayer.volumn = 0.5;
+      this.$els.mplayer.volume = 0.5;
       this.$els.mplayer.play();
       this.playStatus = true;
     },
@@ -171,6 +184,9 @@ var vm = new Vue({
       this.musictime = m_minute + ':' + m_second;
     },
     playEvent:function(){
+      if(this.$els.mplayer.buffered.length == 0){
+        return false;
+      }
       let c_second,c_minute;
       let temp_minute = parseInt(this.$els.mplayer.currentTime / 60);
       if(temp_minute.toString().length > 1){
@@ -197,6 +213,9 @@ var vm = new Vue({
       this.$els.mplayer.currentTime = parseInt(progressX/240*this.$els.mplayer.duration)
     },
     display_lrc:function(play_time) {
+      if(this.$els.mplayer.buffered.length == 0){
+        return false;
+      }
       let lrcs = document.getElementsByClassName('lrc');
       for(let i = 0;i<lrcs.length;i++){
         if(i+1 < lrcs.length){

@@ -46,9 +46,9 @@
 							<div class="time">
 								<span class="curtime">{{curtime}}</span>/<span class="musictime">{{musictime}}</span>
 							</div>
-							<i class="demo-icon icon-volumn" v-show="havevoice">&#xe81e;</i>
-							<i class="demo-icon icon-volumn-off" v-else>&#xe81f;</i>
-        	    <input id="range" type="range" min="0" max="10" value="5" @change="changeVoice">
+							<i class="demo-icon icon-volumn" @click="changeSound" v-show="havevoice">&#xe81e;</i>
+							<i class="demo-icon icon-volumn-off" @click="changeSound" v-else>&#xe81f;</i>
+        	    <input id="range" type="range" v-el:soundrange min="0" max="10" value="5" @change="changeVoice">
 						</li>
 					</ul>
 				</div>
