@@ -93,6 +93,13 @@ var vm = new Vue({
         this.$els.soundrange.value = this.volume;
       }
     },
+    checkStatus:function(){
+      if(this.$els.mplayer.buffered.length == 0){
+        return false;
+      }else{
+        return true;
+      }
+    },
     nextMusic:function(){
       var random_index;
       var random_id;
@@ -184,7 +191,7 @@ var vm = new Vue({
       this.musictime = m_minute + ':' + m_second;
     },
     playEvent:function(){
-      if(this.$els.mplayer.buffered.length == 0){
+      if(!this.checkStatus()){
         return false;
       }
       let c_second,c_minute;
@@ -209,11 +216,14 @@ var vm = new Vue({
       this.$els.playtime.style.transform = "scaleX("+current_percent+")"
     },
     changeProgress:function(event){
+      if(!this.checkStatus()){
+        return false;
+      }
       let progressX = event.clientX - this.$els.progress.getBoundingClientRect().left;
       this.$els.mplayer.currentTime = parseInt(progressX/240*this.$els.mplayer.duration)
     },
     display_lrc:function(play_time) {
-      if(this.$els.mplayer.buffered.length == 0){
+      if(!this.checkStatus()){
         return false;
       }
       let lrcs = document.getElementsByClassName('lrc');
