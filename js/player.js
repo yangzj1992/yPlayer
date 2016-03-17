@@ -29,6 +29,11 @@ var vm = new Vue({
     this.loadMusic();
   },
   methods: {
+    /**
+     * [getJSON generate AJAX request]
+     * @param  {[string]} url [request url]
+     * @return {[promise]} 
+     */
     getJSON:function(url) {
       let promise = new Promise(function(resolve, reject){
         let client = new XMLHttpRequest();
@@ -40,6 +45,9 @@ var vm = new Vue({
       });
       return promise;
     },
+    /**
+     * [changePlay Play status <——>  Pause stauts ]
+     */
     changePlay:function(){
       if(this.playStatus == false){
         this.playStatus = true;
@@ -49,6 +57,10 @@ var vm = new Vue({
         this.$els.mplayer.pause();
       }
     },
+    /**
+     * [loadMusic load music with song id or random song]
+     * @param  {[int]} id [Netease song id]
+     */
     loadMusic:function(id){
       let url = id? 'getSong.php?id='+id : 'getSong.php?id=0';
       this.getJSON(url).then(function(data) {
@@ -73,6 +85,9 @@ var vm = new Vue({
         alert('服务器通信异常');
       });
     },
+    /**
+     * [changeVoice change player 's volume ]
+     */
     changeVoice:function(event){
       this.$els.mplayer.volume = event.target.value / 10;
       if(event.target.value == 0){
@@ -82,6 +97,9 @@ var vm = new Vue({
         this.volume = event.target.value;
       }
     },
+    /**
+     * [changeSound mute <——> used volumn]
+     */
     changeSound:function(){
       if(this.havevoice == true){
         this.havevoice = false;
@@ -93,6 +111,10 @@ var vm = new Vue({
         this.$els.soundrange.value = this.volume;
       }
     },
+    /**
+     * [checkStatus check song's loading status]
+     * @return {[boolean]}
+     */
     checkStatus:function(){
       if(this.$els.mplayer.buffered.length == 0){
         return false;
@@ -174,6 +196,9 @@ var vm = new Vue({
       this.$els.mplayer.play();
       this.playStatus = true;
     },
+    /**
+     * [getMusic get music time]
+     */
     getMusic:function(){
       let m_second,m_minute;
       let temp_minute = parseInt(this.$els.mplayer.duration / 60);
@@ -190,6 +215,9 @@ var vm = new Vue({
       }
       this.musictime = m_minute + ':' + m_second;
     },
+    /**
+     * [playEvent update the playing status(timing 、buffer..)]
+     */
     playEvent:function(){
       if(!this.checkStatus()){
         return false;
