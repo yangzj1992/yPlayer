@@ -17,6 +17,7 @@ var vm = new Vue({
     havevoice:true,
     playStatus:true,
     prevIndex:'',
+    statusText:'',
     prevMusic:'',
     followIndex:'',
     followMusic:'',
@@ -41,7 +42,12 @@ var vm = new Vue({
         client.onreadystatechange = handler;
         client.responseType = "json";
         client.setRequestHeader("Accept", "application/json");
-        client.send();function handler() {if ( this.readyState !== 4 ) {return;}if (this.status === 200) {resolve(this.response);} else {reject(new Error(this.statusText));}};
+        client.send();
+        function handler() {
+          if (this.readyState !== 4) {return;}
+          if (this.status === 200) {resolve(this.response);} 
+          else {reject(new Error(this.statusText));}
+        }
       });
       return promise;
     },
@@ -64,6 +70,7 @@ var vm = new Vue({
     loadMusic:function(id){
       let url = id? 'getSong.php?id='+id : 'getSong.php?id=0';
       this.getJSON(url).then(function(data) {
+        vm.statusText = '';
         vm.musicArray = data.tracks;
         vm.musicLength = vm.musicArray.length;
         vm.$els.album.style.backgroundImage = 'url('+data.cover+')';
@@ -81,6 +88,12 @@ var vm = new Vue({
         vm.$els.mplayer.setAttribute("src", data.mp3);
         vm.$els.mplayer.volume = 0.5;
         vm.$els.mplayer.play();
+        vm.$els.mplayer.onerror = function(){
+          vm.statusText = '网易API抽风了..歌曲无法获取，稍后进入下一首';
+          window.setTimeout(function(){
+            vm.nextMusic()
+          },3000);
+        };
       }, function(error) {
         alert('服务器通信异常');
       });
@@ -123,6 +136,7 @@ var vm = new Vue({
       }
     },
     nextMusic:function(){
+      this.statusText = '';
       var random_index;
       var random_id;
       if(!this.followMusic || !this.followIndex){
@@ -144,7 +158,7 @@ var vm = new Vue({
           vm.showlrc= {"0":"暂无歌词"} ;
         }
       }, function(error) {
-        alert('服务器通信异常');
+        vm.showlrc= {"0":"暂无歌词"};
       });
       let artists_name = '';
       for(let i in this.musicArray[random_index].artists){
@@ -160,12 +174,19 @@ var vm = new Vue({
       this.$els.mplayer.setAttribute("src", mp3_address);
       this.$els.mplayer.volume = 0.5;
       this.$els.mplayer.play();
+      this.$els.mplayer.onerror = function(){
+        vm.statusText = '网易API抽风了..歌曲无法获取，稍后进入下一首';
+        window.setTimeout(function(){
+          vm.nextMusic()
+        },3000);
+      };
       this.playStatus = true;
     },
     backMusic:function(){
       if(!this.prevMusic || !this.prevIndex){
         return false;
       }
+      this.statusText = '';
       this.followIndex = this.playingIndex;
       this.followMusic = this.playingMusic;
       this.showlrc = [];
@@ -176,7 +197,7 @@ var vm = new Vue({
           vm.showlrc= {"0":"暂无歌词"};
         }
       }, function(error) {
-        alert('服务器通信异常');
+        vm.showlrc= {"0":"暂无歌词"};
       });
       let artists_name = '';
       for(let i in this.musicArray[this.prevIndex].artists){
@@ -194,6 +215,12 @@ var vm = new Vue({
       this.$els.mplayer.setAttribute("src", mp3_address);
       this.$els.mplayer.volume = 0.5;
       this.$els.mplayer.play();
+      this.$els.mplayer.onerror = function(){
+        vm.statusText = '网易API抽风了..歌曲无法获取，稍后进入下一首';
+        window.setTimeout(function(){
+          vm.nextMusic()
+        },3000);
+      };
       this.playStatus = true;
     },
     /**
