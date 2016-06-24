@@ -2,7 +2,7 @@
 * yPlayer
 * Author yangzj1992
 */
-"use strict"
+'use strict'
 Vue.config.debug = true;
 var vm = new Vue({
   el: '#ym-player',
@@ -89,7 +89,7 @@ var vm = new Vue({
         vm.$els.mplayer.volume = 0.5;
         vm.$els.mplayer.play();
         vm.$els.mplayer.onerror = function(){
-          vm.statusText = '网易API抽风了..歌曲无法获取，稍后进入下一首';
+          vm.statusText = '网易API获取的歌曲链接无法播放..稍后进入下一首';
           window.setTimeout(function(){
             vm.nextMusic()
           },3000);

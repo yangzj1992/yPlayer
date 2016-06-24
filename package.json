@@ -7,15 +7,18 @@
     "babel-core": "^6.5.2",
     "babel-preset-es2015": "^6.5.0",
     "browser-sync": "^2.9.6",
-    "cz-conventional-changelog": "^1.1.5",
+    "cz-conventional-changelog": "^1.1.6",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.1.0",
     "gulp-babel": "^6.1.2",
     "gulp-concat": "^2.6.0",
+    "gulp-conventional-changelog": "^1.1.0",
     "gulp-minify-css": "^1.2.1",
     "gulp-plumber": "^1.0.1",
     "gulp-rename": "^1.2.2",
     "gulp-rev": "^6.0.1",
+    "gulp-rev-collector": "^1.0.2",
+    "gulp-rev-replace": "^0.4.2",
     "gulp-sass": "^2.2.0",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.4.1",
@@ -23,14 +26,15 @@
     "run-sequence": "^1.1.4"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -w -r 0"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/yangzj1992/yPlayer.git"
   },
   "author": "yangzj1992",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/yangzj1992/yPlayer/issues"
   },
@@ -39,5 +43,8 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "dependencies": {
+    "conventional-changelog": "^1.1.0"
   }
 }
