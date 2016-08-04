@@ -65,8 +65,9 @@
 			</div>
 		</div>
 		<div v-else class="loader-boxs">
-			<p class="milk">yPlayer</p>
+			<p class="milk milk-title">yPlayer</p>
 			<div class="loader"></div>
+			<p class="milk milk-text">加载资源中，请稍后..</p>
 		</div>
 		<audio id="player" @durationchange="getMusic()" @ended="nextMusic()" @timeupdate="playEvent()" v-el:mplayer>
 		</audio>
